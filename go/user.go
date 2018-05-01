@@ -92,9 +92,23 @@ func (u *User) BuyingHistory() (products []Product) {
 
 // BuyProduct : buy product
 func (u *User) BuyProduct(pid string) {
-	db.Exec(
+	productID, _ := strconv.Atoi(pid)
+	createdAt := time.Now()
+
+	res, _ := db.Exec(
 		"INSERT INTO histories (product_id, user_id, created_at) VALUES (?, ?, ?)",
-		pid, u.ID, time.Now())
+		pid, u.ID, createdAt)
+
+	id, err := res.LastInsertId()
+	if err != nil {
+		panic(err.Error())
+	}
+	setHistory(History{
+		ID:        int(id),
+		ProductID: productID,
+		UserID:    u.ID,
+		CreatedAt: createdAt.Format("2006-01-02 15:04:05"),
+	})
 }
 
 // CreateComment : create comment to the product
