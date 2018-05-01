@@ -1,6 +1,14 @@
 package main
 
-import "log"
+import (
+	"fmt"
+	"log"
+	"os"
+)
+
+var (
+	products map[int]*Product
+)
 
 // Product Model
 type Product struct {
@@ -94,4 +102,23 @@ func (p *Product) isBought(uid int) bool {
 	}
 
 	return count > 0
+}
+
+func setProduct(p Product) {
+	products[p.ID] = &p
+}
+
+func loadProducts() {
+	products = make(map[int]*Product)
+
+	rows, err := db.Query("SELECT * FROM products")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "getProducts: %v\n", err)
+		return
+	}
+	for rows.Next() {
+		var p Product
+		rows.Scan(&p.ID, &p.Name, &p.Description, &p.ImagePath, &p.Price, &p.CreatedAt)
+		setProduct(p)
+	}
 }

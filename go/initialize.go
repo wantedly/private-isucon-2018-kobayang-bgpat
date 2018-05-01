@@ -14,6 +14,7 @@ func initialize(c *gin.Context) {
 
 	loadComments()
 	loadUsers()
+	loadProducts()
 
 	c.String(http.StatusOK, "Finish")
 }
