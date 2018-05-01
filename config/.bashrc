@@ -124,3 +124,4 @@ export PATH=$HOME/local/node/bin:$PATH
 export GOPATH=/home/isucon/go
 
 alias kataribe='kataribe -f ~/webapp/config/kataribe.toml < /var/log/nginx/kataribe.log'
+alias kataribe-clear='echo -n | sudo tee /var/log/nginx/kataribe.log'
