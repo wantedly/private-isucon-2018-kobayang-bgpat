@@ -215,5 +215,9 @@ func main() {
 		initialize(c)
 	})
 
+	r.GET("/dump/histories", func(c *gin.Context) {
+		c.JSON(http.StatusOK, histories)
+	})
+
 	r.Run(":8080")
 }
