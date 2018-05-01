@@ -164,3 +164,10 @@ func loadUsers() {
 		setUser(u)
 	}
 }
+
+func updateUser(uid int, lastLogin string) User {
+	user := users[uid]
+	user.LastLogin = lastLogin
+	users[uid] = user
+	return *user
+}
