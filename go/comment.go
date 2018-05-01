@@ -36,6 +36,14 @@ func getComments(pid int) []Comment {
 	return comments
 }
 
+func setComment(c Comment) {
+	comments[c.ID] = &c
+	if _, ok := productComments[c.ProductID]; !ok {
+		productComments[c.ProductID] = make([]*Comment, 0, 1)
+	}
+	productComments[c.ProductID] = append(productComments[c.ProductID], &c)
+}
+
 func loadComments() {
 	comments = make(map[int]*Comment)
 	productComments = make(map[int][]*Comment)
@@ -48,10 +56,6 @@ func loadComments() {
 	for rows.Next() {
 		var c Comment
 		rows.Scan(&c.ID, &c.ProductID, &c.UserID, &c.Content, &c.CreatedAt)
-		comments[c.ID] = &c
-		if _, ok := productComments[c.ProductID]; !ok {
-			productComments[c.ProductID] = make([]*Comment, 0, 1)
-		}
-		productComments[c.ProductID] = append(productComments[c.ProductID], &c)
+		setComment(c)
 	}
 }
