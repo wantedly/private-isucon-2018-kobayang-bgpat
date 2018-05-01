@@ -90,12 +90,10 @@ func (u *User) BuyingHistory() []Product {
 	*/
 
 	result := make([]Product, 0)
-	for pid, h := range userHistories[u.ID] {
+	for _, h := range userHistories[u.ID] {
 		var p Product
-		if product, ok := products[pid]; ok {
+		if product, ok := products[h.ProductID]; ok {
 			p = *product
-		} else {
-			fmt.Printf("product is nil (id = %v)\n", pid)
 		}
 		tmp, _ := time.Parse("2006-01-02 15:04:05", h.CreatedAt)
 		p.CreatedAt = (tmp.Add(9 * time.Hour)).Format("2006-01-02 15:04:05")
