@@ -215,5 +215,12 @@ func main() {
 		initialize(c)
 	})
 
+	r.POST("/push/histories", func(c *gin.Context) {
+		var history History
+		c.BindJSON(&history)
+		setHistory(history)
+		c.JSON(http.StatusOK, history)
+	})
+
 	r.Run(":8080")
 }
