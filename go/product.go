@@ -55,12 +55,15 @@ func getProductsWithCommentsAt(page int) []ProductWithComments {
 		err = rows.Scan(&p.ID, &p.Name, &p.Description, &p.ImagePath, &p.Price, &p.CreatedAt)
 
 		// select comment count for the product
-		var cnt int
-		cnterr := db.QueryRow("SELECT count(*) as count FROM comments WHERE product_id = ?", p.ID).Scan(&cnt)
-		if cnterr != nil {
-			cnt = 0
-		}
-		p.CommentCount = cnt
+		/*
+			var cnt int
+			cnterr := db.QueryRow("SELECT count(*) as count FROM comments WHERE product_id = ?", p.ID).Scan(&cnt)
+			if cnterr != nil {
+				cnt = 0
+			}
+			p.CommentCount = cnt
+		*/
+		cnt := len(productComments[p.ID])
 
 		if cnt > 0 {
 			// select 5 comments and its writer for the product
