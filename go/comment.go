@@ -21,20 +21,12 @@ type Comment struct {
 }
 
 func getComments(pid int) []Comment {
-	rows, err := db.Query("SELECT * FROM comments WHERE product_id = ? ", pid)
-	if err != nil {
-		return nil
+	pComments := productComments[pid]
+	obj := make([]Comment, 0)
+	for _, c := range pComments {
+		obj = append(obj, *c)
 	}
-
-	defer rows.Close()
-	comments := []Comment{}
-	for rows.Next() {
-		c := Comment{}
-		err = rows.Scan(&c.ID, &c.ProductID, &c.UserID, &c.Content, &c.CreatedAt)
-		comments = append(comments, c)
-	}
-
-	return comments
+	return obj
 }
 
 func setComment(c Comment) {
