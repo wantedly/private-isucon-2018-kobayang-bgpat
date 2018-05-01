@@ -25,6 +25,8 @@ func main() {
 	db, _ = sql.Open("mysql", user+":"+pass+"@/"+dbname)
 	db.SetMaxIdleConns(5)
 
+	loading()
+
 	r := gin.Default()
 	// load templates
 	r.Use(static.Serve("/css", static.LocalFile("public/css", true)))
