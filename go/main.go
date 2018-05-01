@@ -222,5 +222,21 @@ func main() {
 		c.JSON(http.StatusOK, history)
 	})
 
+	r.POST("/push/comments", func(c *gin.Context) {
+		var comment Comment
+		c.BindJSON(&comment)
+		setComment(comment)
+		c.JSON(http.StatusOK, comment)
+	})
+
+	r.POST("/push/users/:id/:lastLogin", func(c *gin.Context) {
+		var userId int
+		var lastLogin string
+		userId, _ = strconv.Atoi(c.Param("id"))
+		lastLogin = c.Param("lastLogin")
+		user := updateUser(userId, lastLogin)
+		c.JSON(http.StatusOK, user)
+	})
+
 	r.Run(":8080")
 }
