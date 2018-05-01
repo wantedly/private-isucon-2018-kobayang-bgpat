@@ -12,6 +12,7 @@ import (
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/parnurzeal/gorequest"
 )
 
 var db *sql.DB
@@ -212,6 +213,13 @@ func main() {
 
 	// GET /initialize
 	r.GET("/initialize", func(c *gin.Context) {
+		for _, s := range os.Args[1:] {
+			gorequest.New().Get(s + "/push/initialize").End()
+		}
+		initialize(c)
+	})
+
+	r.GET("/push/initialize", func(c *gin.Context) {
 		initialize(c)
 	})
 
