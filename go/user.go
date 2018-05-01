@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/contrib/sessions"
+	"github.com/parnurzeal/gorequest"
 )
 
 var (
@@ -89,12 +90,19 @@ func (u *User) BuyProduct(pid string) {
 	if err != nil {
 		panic(err.Error())
 	}
-	setHistory(History{
+	h := History{
 		ID:        int(id),
 		ProductID: productID,
 		UserID:    u.ID,
 		CreatedAt: createdAt.Format("2006-01-02 15:04:05"),
-	})
+	}
+	setHistory(h)
+
+	go func() {
+		for _, s := range os.Args[1:] {
+			go gorequest.New().Post(s + "/push/histories").Send(h).End()
+		}
+	}()
 }
 
 // CreateComment : create comment to the product
@@ -110,17 +118,32 @@ func (u *User) CreateComment(pid string, content string) {
 	if err != nil {
 		panic(err.Error())
 	}
-	setComment(Comment{
+	c := Comment{
 		ID:        int(id),
 		ProductID: productID,
 		UserID:    u.ID,
 		Content:   content,
 		CreatedAt: createdAt.Format("2006-01-02 15:04:05"),
-	})
+	}
+	setComment(c)
+
+	go func() {
+		for _, s := range os.Args[1:] {
+			go gorequest.New().Post(s + "/push/comments").Send(c).End()
+		}
+	}()
 }
 
 func (u *User) UpdateLastLogin() {
-	db.Exec("UPDATE users SET last_login = ? WHERE id = ?", time.Now(), u.ID)
+	lastLogin := time.Now().Format("2006-01-02 15:04:05")
+	db.Exec("UPDATE users SET last_login = ? WHERE id = ?", lastLogin, u.ID)
+	users[u.ID].LastLogin = lastLogin
+
+	go func() {
+		for _, s := range os.Args[1:] {
+			go gorequest.New().Post(fmt.Sprintf("%s/push/comments/%d/%s", s, u.ID, lastLogin)).End()
+		}
+	}()
 }
 
 func setUser(u User) {
