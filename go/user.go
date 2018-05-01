@@ -141,7 +141,7 @@ func (u *User) UpdateLastLogin() {
 
 	go func() {
 		for _, s := range os.Args[1:] {
-			go gorequest.New().Post(fmt.Sprintf("%s/push/comments/%d/%s", s, u.ID, lastLogin)).End()
+			go gorequest.New().Post(fmt.Sprintf("%s/push/users/%d/%s", s, u.ID, lastLogin)).End()
 		}
 	}()
 }
