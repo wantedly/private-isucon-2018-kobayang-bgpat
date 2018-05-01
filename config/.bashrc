@@ -122,3 +122,5 @@ export PATH=$HOME/local/ruby/bin:$PATH
 export PATH=$HOME/local/python/bin:$PATH
 export PATH=$HOME/local/node/bin:$PATH
 export GOPATH=/home/isucon/go
+
+alias kataribe='kataribe -f ~/webapp/config/kataribe.toml < /var/log/nginx/kataribe.log'
