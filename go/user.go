@@ -94,6 +94,8 @@ func (u *User) BuyingHistory() []Product {
 		var p Product
 		if product, ok := products[pid]; ok {
 			p = *product
+		} else {
+			fmt.Println("product is nil (id = %v)\n", pid)
 		}
 		tmp, _ := time.Parse("2006-01-02 15:04:05", h.CreatedAt)
 		p.CreatedAt = (tmp.Add(9 * time.Hour)).Format("2006-01-02 15:04:05")
