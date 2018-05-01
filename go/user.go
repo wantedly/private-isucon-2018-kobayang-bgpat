@@ -1,10 +1,16 @@
 package main
 
 import (
+	"fmt"
+	"os"
 	"strconv"
 	"time"
 
 	"github.com/gin-gonic/contrib/sessions"
+)
+
+var (
+	users map[int]*User
 )
 
 // User model
@@ -115,4 +121,23 @@ func (u *User) CreateComment(pid string, content string) {
 
 func (u *User) UpdateLastLogin() {
 	db.Exec("UPDATE users SET last_login = ? WHERE id = ?", time.Now(), u.ID)
+}
+
+func setUser(u User) {
+	users[u.ID] = &u
+}
+
+func loadUsers() {
+	users = make(map[int]*User)
+
+	rows, err := db.Query("SELECT * FROM users")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "getUsers %v\n", err)
+		return
+	}
+	for rows.Next() {
+		var u User
+		rows.Scan(&u.ID, &u.Name, &u.Email, &u.Password, &u.LastLogin)
+		setUser(u)
+	}
 }
