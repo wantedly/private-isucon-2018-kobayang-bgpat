@@ -64,6 +64,7 @@ func getProductsWithCommentsAt(page int) []ProductWithComments {
 			p.CommentCount = cnt
 		*/
 		cnt := len(productComments[p.ID])
+		p.CommentCount = cnt
 
 		if cnt > 0 {
 			// select 5 comments and its writer for the product
