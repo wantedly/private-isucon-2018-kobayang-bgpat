@@ -61,7 +61,7 @@ func currentUser(session sessions.Session) User {
 }
 
 // BuyingHistory : products which user had bought
-func (u *User) BuyingHistory() (products []Product) {
+func (u *User) BuyingHistory() []Product {
 	/*
 		rows, err := db.Query(
 			"SELECT p.id, p.name, p.description, p.image_path, p.price, h.created_at "+
@@ -89,14 +89,18 @@ func (u *User) BuyingHistory() (products []Product) {
 		}
 	*/
 
+	result := make([]Product, 0)
 	for pid, h := range userHistories[u.ID] {
-		p := products[pid]
+		var p Product
+		if product, ok := products[pid]; ok {
+			p = *product
+		}
 		tmp, _ := time.Parse("2006-01-02 15:04:05", h.CreatedAt)
 		p.CreatedAt = (tmp.Add(9 * time.Hour)).Format("2006-01-02 15:04:05")
-		products = append(products, p)
+		result = append(result, p)
 	}
 
-	return
+	return result
 }
 
 // BuyProduct : buy product
