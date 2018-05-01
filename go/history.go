@@ -1,8 +1,13 @@
 package main
 
+import (
+	"sync"
+)
+
 var (
 	histories     map[int]*History
 	userHistories map[int][]*History
+	historiesMu   sync.Mutex
 )
 
 type History struct {
@@ -17,7 +22,9 @@ func setHistory(h History) {
 	if _, ok := userHistories[h.UserID]; !ok {
 		userHistories[h.UserID] = make([]*History, 0, 1)
 	}
+	historiesMu.Lock()
 	userHistories[h.UserID] = append(userHistories[h.UserID], &h)
+	historiesMu.Unlock()
 }
 
 func loadHistories() {

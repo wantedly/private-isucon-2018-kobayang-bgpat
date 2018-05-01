@@ -3,11 +3,13 @@ package main
 import (
 	"fmt"
 	"os"
+	"sync"
 )
 
 var (
 	comments        map[int]*Comment
 	productComments map[int][]*Comment
+	commentsMu      sync.Mutex
 )
 
 // Comment Model
@@ -34,7 +36,9 @@ func setComment(c Comment) {
 	if _, ok := productComments[c.ProductID]; !ok {
 		productComments[c.ProductID] = make([]*Comment, 0, 1)
 	}
+	commentsMu.Lock()
 	productComments[c.ProductID] = append(productComments[c.ProductID], &c)
+	commentsMu.Unlock()
 }
 
 func loadComments() {
