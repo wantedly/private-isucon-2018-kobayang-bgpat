@@ -1,0 +1,43 @@
+{{ define "content" }}
+<div class="jumbotron">
+  <div class="container">
+    <h1>今日は大安売りの日です！</h1>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    {{ $loggedIn := gt .CurrentUser.ID 0 }}
+    {{ range $index, $product := .Products }}
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <a href="/products/{{ $product.ID }}">{{ $product.Name }}</a>
+          </div>
+          <div class="panel-body">
+            <a href="/products/{{ $product.ID }}"><img src="{{ $product.ImagePath }}" class="img-responsive" /></a>
+            <h4>価格</h4>
+            <p>{{ $product.Price }}円</p>
+            <h4>商品説明</h4>
+            <p>{{ $product.Description }}</p>
+            <h4>{{ $product.CommentCount }}件のレビュー</h4>
+            <ul>
+              {{ range $cw := $product.Comments }}
+                <li>{{ $cw.Content }} by {{ $cw.Writer }}</li>
+              {{ end }}
+            </ul>
+          </div>
+          {{ if $loggedIn }}
+            <div class="panel-footer">
+              <form method="POST" action="/products/buy/{{ $product.ID }}">
+                <fieldset>
+                  <input class="btn btn-success btn-block" type="submit" name="buy" value="購入" />
+                </fieldset>
+              </form>
+            </div>
+          {{ end }}
+        </div>
+      </div>
+    {{ end }}
+  </div>
+</div>
+{{ end }}
