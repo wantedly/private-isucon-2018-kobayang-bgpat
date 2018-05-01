@@ -1,4 +1,4 @@
-# ~/.bashrc: executed by bash(1) for non-login shells.
+#~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
@@ -125,3 +125,6 @@ export GOPATH=/home/isucon/go
 
 alias kataribe='kataribe -f ~/webapp/config/kataribe.toml < /var/log/nginx/kataribe.log'
 alias kataribe-clear='echo -n | sudo tee /var/log/nginx/kataribe.log'
+
+alias prebench=$HOME/webapp/scripts/pre-bench.sh
+
