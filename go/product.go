@@ -3,10 +3,12 @@ package main
 import (
 	"fmt"
 	"os"
+	"sync"
 )
 
 var (
-	products map[int]*Product
+	products   map[int]*Product
+	productsMu sync.Mutex
 )
 
 // Product Model
@@ -99,7 +101,9 @@ func (p *Product) isBought(uid int) bool {
 }
 
 func setProduct(p Product) {
+	productsMu.Lock()
 	products[p.ID] = &p
+	productsMu.Unlock()
 }
 
 func loadProducts() {

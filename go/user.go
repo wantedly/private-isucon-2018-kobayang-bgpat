@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"sync"
 	"time"
 
 	"github.com/gin-gonic/contrib/sessions"
@@ -11,7 +12,8 @@ import (
 )
 
 var (
-	users map[int]*User
+	users   map[int]*User
+	usersMu sync.Mutex
 )
 
 // User model
@@ -147,7 +149,9 @@ func (u *User) UpdateLastLogin() {
 }
 
 func setUser(u User) {
+	usersMu.Lock()
 	users[u.ID] = &u
+	usersMu.Unlock()
 }
 
 func loadUsers() {
@@ -166,8 +170,10 @@ func loadUsers() {
 }
 
 func updateUser(uid int, lastLogin string) User {
+	usersMu.Lock()
 	user := users[uid]
 	user.LastLogin = lastLogin
 	users[uid] = user
+	usersMu.Unlock()
 	return *user
 }
