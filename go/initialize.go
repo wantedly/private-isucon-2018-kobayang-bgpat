@@ -13,6 +13,7 @@ func initialize(c *gin.Context) {
 	db.Exec("DELETE FROM histories WHERE id > 500000")
 
 	loadComments()
+	loadUsers()
 
 	c.String(http.StatusOK, "Finish")
 }
