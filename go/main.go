@@ -248,6 +248,5 @@ func main() {
 		c.JSON(http.StatusOK, user)
 	})
 
-	go r.RunUnix("/tmp/webapp.sock")
 	r.Run(":8080")
 }
