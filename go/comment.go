@@ -17,6 +17,7 @@ type Comment struct {
 	UserID    int
 	Content   string
 	CreatedAt string
+	User      *User
 }
 
 func getComments(pid int) []Comment {
